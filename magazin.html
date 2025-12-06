@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин - POL PROKAT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #fff;
+            color: #000;
+            line-height: 1.4;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        
+        /* Шапка сайта */
+        header {
+            background-color: #F26B36;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-logo img {
+            height: 50px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+        
+        /* Мобильное меню */
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            max-width: 80%;
+            height: 100vh;
+            background-color: #F26B36;
+            z-index: 1000;
+            padding: 80px 20px 20px;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            transform: translateX(100%);
+        }
+
+        .mobile-nav.active {
+            display: block;
+            transform: translateX(0);
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .mobile-nav .nav-link {
+            display: block;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .mobile-nav .nav-link:hover {
+            padding-left: 10px;
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .mobile-phone {
+            display: none;
+            font-weight: bold;
+            color: #fff;
+            font-size: 18px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+        
+        .mobile-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        
+        /* Хлебные крошки */
+        .breadcrumbs {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .breadcrumbs a {
+            color: #F26B36;
+            text-decoration: none;
+        }
+        
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumbs span {
+            color: #666;
+        }
+        
+        /* Заголовок страницы */
+        .page-header {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+        
+        .page-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #F26B36;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        /* Основной контент */
+        .shop-section {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+        
+        /* Сообщение о скором открытии */
+        .coming-soon {
+            background: linear-gradient(135deg, #F26B36 0%, #FF8E5D 100%);
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 60px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(242, 107, 54, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .coming-soon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .coming-soon::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -30%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        
+        .coming-soon-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .coming-soon-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .coming-soon-icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .signature {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 30px;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Секция предстоящих товаров */
+        .upcoming-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: #F26B36;
+        }
+        
+        .upcoming-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .upcoming-item {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .upcoming-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            border-color: #F26B36;
+        }
+        
+        .upcoming-icon {
+            font-size: 50px;
+            color: #F26B36;
+            margin-bottom: 20px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upcoming-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .upcoming-desc {
+            color: #666;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #F26B36;
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        /* FAQ секция */
+        .faq-section {
+            background-color: #f9f9f9;
+            border-radius: 20px;
+            padding: 50px;
+            margin-top: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #eee;
+            background: white;
+        }
+        
+        .faq-question {
+            padding: 20px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        
+        .faq-question:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .faq-question.active {
+            background-color: #F26B36;
+            color: white;
+        }
+        
+        .faq-icon {
+            transition: transform 0.3s;
+        }
+        
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .faq-answer.active {
+            padding: 20px 25px;
+            max-height: 500px;
+        }
+        
+        .faq-answer p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        /* Социальные призывы */
+        .social-call {
+            text-align: center;
+            margin: 40px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border: 2px dashed #F26B36;
+        }
+        
+        .social-call h3 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .social-call p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: #F26B36;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .social-btn.whatsapp:hover {
+            background-color: #25D366;
+        }
+        
+        .social-btn.vk:hover {
+            background-color: #0077FF;
+        }
+        
+        .social-btn.telegram:hover {
+            background-color: #0088cc;
+        }
+        
+        .social-btn.instagram:hover {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+        }
+        
+        /* Подвал (такой же как на главной) */
+        footer {
+            background-color: #F26B36;
+            color: #fff;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-main {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 50px;
+            align-items: flex-start;
+        }
+        
+        .footer-contact {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .footer-map {
+            flex: 1.2;
+            min-height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .footer-map-placeholder {
+            height: 100%;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            min-height: 400px;
+        }
+        
+        .footer-map-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .footer-contact-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+        
+        .footer-contact-description {
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .footer-contact-subtitle {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 18px;
+            color: #fff;
+        }
+        
+        .address-block {
+            margin-bottom: 25px;
+        }
+        
+        .address-text {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .work-hours {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .work-hours-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .work-hours-table td {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        .work-hours-table td:first-child {
+            font-weight: bold;
+            width: 40%;
+        }
+        
+        .social-media {
+            margin-top: 35px;
+        }
+        
+        .social-media-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .social-icon.whatsapp:hover {
+            background-color: #25D366;
+        }
+        
+        .social-icon.vk:hover {
+            background-color: #0077FF;
+        }
+        
+        .social-icon.telegram:hover {
+            background-color: #0088cc;
+        }
+        
+        .social-icon.instagram:hover {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        /* Анимация для появления элементов */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* ===== МОБИЛЬНАЯ АДАПТИВНОСТЬ ===== */
+        @media (max-width: 992px) {
+            .page-title {
+                font-size: 30px;
+            }
+            
+            .coming-soon {
+                padding: 40px;
+            }
+            
+            .coming-soon-title {
+                font-size: 28px;
+            }
+            
+            .upcoming-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .faq-section {
+                padding: 30px;
+            }
+            
+            .social-call {
+                padding: 30px;
+            }
+            
+            .social-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .social-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            /* Мобильное меню */
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .mobile-phone {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 28px;
+            }
+            
+            .page-subtitle {
+                font-size: 16px;
+            }
+            
+            .coming-soon {
+                padding: 30px 20px;
+                border-radius: 15px;
+            }
+            
+            .coming-soon-title {
+                font-size: 24px;
+            }
+            
+            .coming-soon-text {
+                font-size: 16px;
+            }
+            
+            .coming-soon-icon {
+                font-size: 60px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .upcoming-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .upcoming-item {
+                padding: 20px;
+            }
+            
+            .upcoming-name {
+                font-size: 20px;
+            }
+            
+            .faq-question {
+                padding: 15px 20px;
+                font-size: 16px;
+            }
+            
+            .faq-answer.active {
+                padding: 15px 20px;
+            }
+            
+            .social-call h3 {
+                font-size: 22px;
+            }
+            
+            .social-call p {
+                font-size: 15px;
+            }
+            
+            .footer-main {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .footer-map-placeholder {
+                min-height: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .coming-soon {
+                padding: 25px 15px;
+            }
+            
+            .coming-soon-title {
+                font-size: 22px;
+            }
+            
+            .coming-soon-icon {
+                font-size: 50px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .faq-section {
+                padding: 20px 15px;
+            }
+            
+            .social-call {
+                padding: 25px 15px;
+            }
+            
+            .social-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="header-container">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="images/logo1.png" alt="POL PROKAT" 
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjUwIiB2aWV3Qm94PSIwIDAgMTUwIDUwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8dGV4dCB4PSI3NSIgeT0iMjgiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJib2xkIj5QT0wgUFJPS0FUPC90ZXh0Pgo8L3N2Zz4='; this.style.filter='none'"
+                         style="height: 50px;">
+                </a>
+            </div>
+            
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Мобильное меню -->
+        <nav class="mobile-nav" id="mobileNav">
+            <button class="mobile-close-btn" id="mobileCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="summer.html" class="nav-link">Летний прокат</a>
+            <a href="winter.html" class="nav-link">Зимний прокат</a>
+            <a href="service.html" class="nav-link">Сервис</a>
+            <a href="#footer" class="nav-link">Контакты</a>
+            <div class="mobile-phone">+7 (905) 805-40-54</div>
+        </nav>
+    </header>
+
+    <!-- Хлебные крошки -->
+    <div class="breadcrumbs">
+        <a href="index.html">Главная</a> / <span>Магазин</span>
+    </div>
+
+    <!-- Заголовок страницы -->
+    <div class="page-header">
+        <h1 class="page-title">МАГАЗИН</h1>
+        <p class="page-subtitle">Скоро откроем для вас мир новых возможностей и ярких впечатлений</p>
+    </div>
+
+    <!-- Основной контент -->
+    <section class="shop-section">
+        <!-- Сообщение о скором открытии -->
+        <div class="coming-soon fade-in">
+            <div class="coming-soon-icon">
+                <i class="fas fa-tools"></i>
+            </div>
+            <h2 class="coming-soon-title">СКОРО ОТКРЫТИЕ!</h2>
+            <p class="coming-soon-text">
+                Друзья, мы не стоим на месте и постоянно думаем, как сделать ваш досуг еще ярче. 
+                Поэтому наша команда уже работает над расширением ассортимента.
+            </p>
+            <p class="coming-soon-text">
+                Скоро в нашем парке появится <strong>новое, современное снаряжение</strong>, которое откроет для вас 
+                еще больше возможностей для активного отдыха и адреналина.
+            </p>
+            <p class="coming-soon-text">
+                Оставайтесь на связи, чтобы быть первыми, кто узнает о новинках! Подписывайтесь на наши 
+                социальные сети или следите за обновлениями на сайте.
+            </p>
+            <p class="signature">Ваш PolPROkat</p>
+        </div>
+
+        <!-- Секция предстоящих товаров -->
+        <div class="upcoming-section fade-in">
+            <h2 class="section-title">ЧТО МЫ ГОТОВИМ ДЛЯ ВАС</h2>
+            <div class="upcoming-grid">
+                <div class="upcoming-item">
+                    <div class="upcoming-icon">
+                        <i class="fas fa-bicycle"></i>
+                    </div>
+                    <h3 class="upcoming-name">Горные велосипеды</h3>
+                    <p class="upcoming-desc">Современные МТВ для активного отдыха по доступным ценам</p>
+                    <span class="badge">Скоро в продаже</span>
+                </div>
+                
+                <div class="upcoming-item">
+                    <div class="upcoming-icon">
+                        <i class="fas fa-snowboarding"></i>
+                    </div>
+                    <h3 class="upcoming-name">Зимнее снаряжение</h3>
+                    <p class="upcoming-desc">Лыжи, сноуборды и аксессуары для зимних приключений</p>
+                    <span class="badge">Сезон 2024</span>
+                </div>
+                
+                <div class="upcoming-item">
+                    <div class="upcoming-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="upcoming-name">Электросамокаты</h3>
+                    <p class="upcoming-desc">Городские и внедорожные модели с длительным запасом хода</p>
+                    <span class="badge">Скоро в продаже</span>
+                </div>
+                
+                <div class="upcoming-item">
+                    <div class="upcoming-icon">
+                        <i class="fas fa-hiking"></i>
+                    </div>
+                    <h3 class="upcoming-name">Туристическое снаряжение</h3>
+                    <p class="upcoming-desc">Все для походов и активного отдыха на природе</p>
+                    <span class="badge">В разработке</span>
+                </div>
+                
+                <div class="upcoming-item">
+                    <div class="upcoming-icon">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <h3 class="upcoming-name">Фирменная одежда</h3>
+                    <p class="upcoming-desc">Стильная и функциональная экипировка с логотипом PolPROkat</p>
+                    <span class="badge">Скоро в продаже</span>
+                </div>
+                
+                <div class="upcoming-item">
+                    <div class="upcoming-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="upcoming-name">Аксессуары и запчасти</h3>
+                    <p class="upcoming-desc">Все необходимое для обслуживания и кастомизации техники</p>
+                    <span class="badge">Сезон 2024</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Призыв к подписке -->
+        <div class="social-call fade-in">
+            <h3>БУДЬТЕ ПЕРВЫМИ!</h3>
+            <p>Подписывайтесь на наши социальные сети, чтобы не пропустить новинки, специальные предложения и акции</p>
+            <div class="social-buttons">
+                <a href="https://wa.me/79058054054" class="social-btn whatsapp" target="_blank">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="https://vk.com/polprokat" class="social-btn vk" target="_blank">
+                    <i class="fab fa-vk"></i> ВКонтакте
+                </a>
+                <a href="https://t.me/polprokat96" class="social-btn telegram" target="_blank">
+                    <i class="fab fa-telegram"></i> Telegram
+                </a>
+                <a href="https://www.instagram.com/polprokat?utm_medium=copy_link" class="social-btn instagram" target="_blank">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+            </div>
+        </div>
+
+        <!-- FAQ секция -->
+        <div class="faq-section fade-in">
+            <h2 class="section-title">ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Когда откроется магазин?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Мы планируем открытие интернет-магазина в ближайшие полгода. Следите за обновлениями в наших социальных сетях - там мы анонсируем точную дату запуска первыми!</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Какие товары будут в магазине?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>В нашем магазине появятся: велосипеды (горные, городские, детские), электросамокаты, зимнее снаряжение (лыжи, сноуборды), туристическое снаряжение, аксессуары для активного отдыха и фирменная одежда PolPROkat.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Будут ли скидки при открытии?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Да! Для наших первых покупателей мы приготовили специальные открыточные скидки, бонусы и подарки. Самые выгодные предложения получат подписчики наших социальных сетей.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Можно ли будет купить товар в рассрочку?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Да, мы планируем сотрудничество с банками для предоставления рассрочки на крупные покупки. Также для постоянных клиентов проката будут действовать специальные условия.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Будет ли доставка по городу?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Конечно! Мы организуем удобную доставку по Полевскому и ближайшим населенным пунктам. Для крупногабаритных товаров (велосипеды, самокаты) доставка будет осуществляться нашей собственной службой.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Смогу ли я получить сервисное обслуживание?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Да, все товары, купленные в нашем магазине, будут обслуживаться в нашем сервисном центре. Для них действует гарантия и постгарантийное обслуживание.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Будут ли акции для клиентов проката?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Конечно! Наши постоянные клиенты проката получат специальные скидочные карты и бонусы при покупке в магазине. Чем чаще вы арендуете у нас технику - тем больше бонусов получаете.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Подвал -->
+    <footer id="footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-contact">
+                    <h3 class="footer-contact-title">КОНТАКТЫ</h3>
+                    <p class="footer-contact-description">Принимаем заявки на прокат и обслуживание велосипедов и электросамокатов.</p>
+                    
+                    <p class="footer-contact-subtitle">Сервисный центр POL PROKAT в городе Полевской</p>
+                    
+                    <div class="address-block">
+                        <p class="address-text">АДРЕС СЕРВИСА: УЛ. ЛЕНИНА, 19, ПОЛЕВСКОЙ</p>
+                        <p class="address-text">ТЕЛЕФОН СЕРВИСА: +7 (495) 805-40-54</p>
+                    </div>
+                    
+                    <div class="address-block">
+                        <p class="address-text">АДРЕС СЕРВИСА: УЛ. КОММУНИСТИЧЕСКАЯ, 29, ПОЛЕВСКОЙ</p>
+                        <p class="address-text">ТЕЛЕФОН СЕРВИСА: +7 (495) 805-18-18</p>
+                    </div>
+                    
+                    <div class="work-hours">
+                        <h3 class="footer-contact-subtitle">ЧАСЫ РАБОТЫ СЕРВИСА:</h3>
+                        <table class="work-hours-table">
+                            <tr>
+                                <td>ПН-ПТ:</td>
+                                <td>10:00-19:00</td>
+                            </tr>
+                            <tr>
+                                <td>СБ:</td>
+                                <td>10:00-18:00</td>
+                            </tr>
+                            <tr>
+                                <td>ВС:</td>
+                                <td>11:00-16:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- Социальные сети -->
+                    <div class="social-media">
+                        <h3 class="social-media-title">СВЯЗАТЬСЯ С НАМИ:</h3>
+                        <div class="social-icons">
+                            <a href="https://wa.me/79058054054" class="social-icon whatsapp" target="_blank" title="WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="https://vk.com/polprokat" class="social-icon vk" target="_blank" title="ВКонтакте">
+                                <i class="fab fa-vk"></i>
+                            </a>
+                            <a href="https://t.me/polprokat96" class="social-icon telegram" target="_blank" title="Telegram">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://www.instagram.com/polprokat?utm_medium=copy_link" class="social-icon instagram" target="_blank" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-map">
+                    <div class="footer-map-placeholder">
+                        <img src="images/map.jpg" alt="Карта местоположения сервиса POL PROKAT">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© POL PROKAT. Все права защищены.</p>
+                <p>Профессиональный сервис по ремонту и обслуживанию велосипедов и электросамокатов</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Мобильное меню
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+    const mobileNav = document.getElementById('mobileNav');
+
+    // Открытие меню
+    mobileMenuToggle.addEventListener('click', function() {
+        mobileNav.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Закрытие меню
+    mobileCloseBtn.addEventListener('click', function() {
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+
+    // Закрытие меню при клике на ссылку
+    document.querySelectorAll('.mobile-nav .nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            mobileNav.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // FAQ аккордеон
+    document.addEventListener('DOMContentLoaded', function() {
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', function() {
+                // Закрываем все остальные открытые вопросы
+                faqQuestions.forEach(otherQuestion => {
+                    if (otherQuestion !== question) {
+                        otherQuestion.classList.remove('active');
+                        otherQuestion.nextElementSibling.classList.remove('active');
+                    }
+                });
+                
+                // Открываем/закрываем текущий вопрос
+                this.classList.toggle('active');
+                const answer = this.nextElementSibling;
+                answer.classList.toggle('active');
+                
+                // Если ответ открывается, плавно прокручиваем к нему на мобильных
+                if (this.classList.contains('active') && window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
+                }
+            });
+        });
+        
+        // Анимация появления элементов при скролле
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+        
+        // Начальные стили для анимации
+        fadeElements.forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        });
+        
+        // Запускаем анимацию при загрузке и скролле
+        window.addEventListener('load', fadeInOnScroll);
+        window.addEventListener('scroll', fadeInOnScroll);
+        
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Добавляем активный класс текущей странице в меню
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.mobile-nav .nav-link').forEach(link => {
+            const linkHref = link.getAttribute('href');
+            if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
+                link.style.fontWeight = 'bold';
+                link.style.color = '#fff';
+                link.style.backgroundColor = 'rgba(255,255,255,0.2)';
+                link.style.borderRadius = '5px';
+                link.style.paddingLeft = '15px';
+            }
+        });
+        
+        // Открываем первый FAQ по умолчанию на мобильных
+        if (window.innerWidth <= 768) {
+            const firstQuestion = document.querySelector('.faq-question');
+            if (firstQuestion) {
+                firstQuestion.classList.add('active');
+                firstQuestion.nextElementSibling.classList.add('active');
+            }
+        }
+    });
+    </script>
+</body>
+</html>

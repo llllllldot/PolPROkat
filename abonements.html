@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Абонементы - POL PROKAT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #000;
+            line-height: 1.4;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        
+        /* Шапка сайта */
+        header {
+            background-color: #F26B36;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-logo img {
+            height: 50px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+        
+        /* Мобильное меню */
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            max-width: 80%;
+            height: 100vh;
+            background-color: #F26B36;
+            z-index: 1000;
+            padding: 80px 20px 20px;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            transform: translateX(100%);
+        }
+
+        .mobile-nav.active {
+            display: block;
+            transform: translateX(0);
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .mobile-nav .nav-link {
+            display: block;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .mobile-nav .nav-link:hover {
+            padding-left: 10px;
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .mobile-phone {
+            display: none;
+            font-weight: bold;
+            color: #fff;
+            font-size: 18px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+        
+        .mobile-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        
+        /* Хлебные крошки */
+        .breadcrumbs {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .breadcrumbs a {
+            color: #F26B36;
+            text-decoration: none;
+        }
+        
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumbs span {
+            color: #666;
+        }
+        
+        /* Заголовок страницы */
+        .page-header {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+        
+        .page-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #F26B36;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        /* Секции абонементов */
+        .subscription-section {
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    display: block; /* Изменено с inline-block на block */
+    width: 100%; /* Добавлено */
+    left: 0; /* Изменено */
+    transform: none; /* Убрано */
+    /* убрано: left: 50%; transform: translateX(-50%); */
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%; /* Добавлено */
+    transform: translateX(-50%); /* Добавлено */
+    width: 200px; /* Увеличено с 100% */
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #F26B36, transparent);
+}
+        
+        /* Фоны для разных категорий */
+        .winter-bg {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            padding: 40px;
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+            color: white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .forest-bg {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            padding: 40px;
+            background: linear-gradient(135deg, #0f9b0f 0%, #3a7c3a 100%);
+            color: white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .city-bg {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            padding: 40px;
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        /* Декоративные фоновые изображения */
+        .section-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        
+        .winter-bg .section-bg {
+            background-image: url('https://images.unsplash.com/photo-1491002052546-bf38f186af56?auto=format&fit=crop&w=1920');
+        }
+        
+        .forest-bg .section-bg {
+            background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920');
+        }
+        
+        .city-bg .section-bg {
+            background-image: url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1920');
+        }
+        
+        /* Контейнер для снежинок */
+        .snow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .snowflake {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+        
+        /* Сетка абонементов */
+        .subscriptions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Карточка абонемента */
+        .subscription-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+        
+        .subscription-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-color: #F26B36;
+        }
+        
+        .subscription-card.popular {
+            border: 3px solid #F26B36;
+            position: relative;
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 20px;
+            right: -35px;
+            background: #F26B36;
+            color: white;
+            padding: 10px 40px;
+            font-size: 14px;
+            font-weight: bold;
+            transform: rotate(45deg);
+            z-index: 2;
+        }
+        
+        /* Заголовок карточки */
+        .subscription-header {
+            margin-bottom: 25px;
+        }
+        
+        .subscription-count {
+            font-size: 24px;
+            font-weight: 800;
+            color: #333;
+            background: linear-gradient(45deg, #F26B36, #FF8E5D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .subscription-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        
+        .subscription-icon {
+            font-size: 50px;
+            color: #F26B36;
+            margin-bottom: 20px;
+        }
+        
+        /* Тело карточки */
+        .subscription-body {
+            margin-bottom: 25px;
+        }
+        
+        .subscription-description {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            min-height: 80px;
+        }
+        
+        .subscription-gift {
+            background: #FFF8E1;
+            border-left: 4px solid #F26B36;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .gift-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .gift-title i {
+            color: #F26B36;
+        }
+        
+        .gift-text {
+            color: #666;
+            font-size: 15px;
+        }
+        
+        /* Цена */
+        .subscription-price {
+            font-size: 42px;
+            font-weight: 900;
+            color: #F26B36;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .subscription-price::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: #eee;
+        }
+        
+        .subscription-price::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: #eee;
+        }
+        
+        .price-unit {
+            font-size: 20px;
+            color: #777;
+            font-weight: normal;
+        }
+        
+        /* Кнопка покупки */
+        .subscription-button {
+            display: inline-block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #F26B36, #FF8E5D);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .subscription-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(242, 107, 54, 0.3);
+        }
+        
+        .subscription-button:active {
+            transform: scale(0.98);
+        }
+        
+        .subscription-button i {
+            margin-right: 10px;
+        }
+        
+        /* Информационная секция */
+        .info-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .info-icon {
+            font-size: 40px;
+            color: #F26B36;
+            margin-bottom: 20px;
+        }
+        
+        .info-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .info-text {
+            color: #666;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        /* Подвал */
+        footer {
+            background-color: #F26B36;
+            color: #fff;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-main {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 50px;
+            align-items: flex-start;
+        }
+        
+        .footer-contact {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .footer-map {
+            flex: 1.2;
+            min-height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .footer-map-placeholder {
+            height: 100%;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            min-height: 400px;
+        }
+        
+        .footer-map-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .footer-contact-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+        
+        .footer-contact-description {
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .footer-contact-subtitle {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 18px;
+            color: #fff;
+        }
+        
+        .address-block {
+            margin-bottom: 25px;
+        }
+        
+        .address-text {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .work-hours {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .work-hours-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .work-hours-table td {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        .work-hours-table td:first-child {
+            font-weight: bold;
+            width: 40%;
+        }
+        
+        .social-media {
+            margin-top: 35px;
+        }
+        
+        .social-media-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .social-icon.whatsapp:hover {
+            background-color: #25D366;
+        }
+        
+        .social-icon.vk:hover {
+            background-color: #0077FF;
+        }
+        
+        .social-icon.telegram:hover {
+            background-color: #0088cc;
+        }
+        
+        .social-icon.instagram:hover {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        /* Модальное окно покупки */
+        .purchase-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .purchase-modal.active {
+            display: flex;
+        }
+        
+        .purchase-modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            animation: modalAppear 0.4s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-header {
+            padding: 25px 30px;
+            background: linear-gradient(45deg, #F26B36, #FF8E5D);
+            border-radius: 20px 20px 0 0;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        
+        .modal-close:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        /* ===== АДАПТИВНОСТЬ ===== */
+        
+        /* Планшеты (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .page-title {
+                font-size: 32px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .subscription-title {
+                font-size: 24px;
+            }
+            
+            .subscription-price {
+                font-size: 36px;
+            }
+            
+            .subscription-icon {
+                font-size: 45px;
+            }
+            
+            .winter-bg, .forest-bg, .city-bg {
+                padding: 30px 25px;
+            }
+            
+            .subscription-card {
+                padding: 25px;
+            }
+            
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-main {
+                gap: 40px;
+            }
+        }
+        
+        /* Планшеты вертикально (768px и меньше) */
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .mobile-phone {
+                display: block;
+            }
+            
+            .page-title {
+                font-size: 28px;
+                padding: 0 15px;
+            }
+            
+            .page-subtitle {
+                font-size: 16px;
+                padding: 0 15px;
+            }
+            
+            .section-title {
+                font-size: 26px;
+                margin-bottom: 30px;
+            }
+            
+            .subscription-section {
+                margin-bottom: 60px;
+                padding: 0 15px;
+            }
+            
+            .subscriptions-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            
+            .winter-bg, .forest-bg, .city-bg {
+                padding: 25px 20px;
+                border-radius: 15px;
+            }
+            
+            .subscription-card {
+                padding: 25px 20px;
+            }
+            
+            .subscription-count {
+                font-size: 22px;
+            }
+            
+            .subscription-title {
+                font-size: 22px;
+            }
+            
+            .subscription-icon {
+                font-size: 40px;
+            }
+            
+            .subscription-description {
+                font-size: 15px;
+                min-height: 70px;
+            }
+            
+            .subscription-price {
+                font-size: 34px;
+                margin: 20px 0;
+            }
+            
+            .subscription-price::before,
+            .subscription-price::after {
+                width: 80px;
+            }
+            
+            .price-unit {
+                font-size: 18px;
+            }
+            
+            .subscription-button {
+                padding: 16px;
+                font-size: 16px;
+            }
+            
+            .popular-badge {
+                padding: 8px 35px;
+                font-size: 12px;
+                right: -30px;
+                top: 15px;
+            }
+            
+            .info-section {
+                margin: 50px auto;
+                padding: 0 15px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            
+            .info-card {
+                padding: 25px;
+            }
+            
+            .footer-main {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .footer-map {
+                min-height: 300px;
+            }
+            
+            .footer-map-placeholder {
+                min-height: 300px;
+            }
+            
+            .footer-contact-title {
+                font-size: 24px;
+            }
+            
+            .footer-contact-subtitle {
+                font-size: 18px;
+            }
+            
+            .modal-header {
+                padding: 20px;
+            }
+            
+            .modal-title {
+                font-size: 20px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+        }
+        
+        /* Телефоны (480px и меньше) */
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .page-subtitle {
+                font-size: 15px;
+                margin-bottom: 30px;
+            }
+            
+            .section-title {
+                font-size: 22px;
+                margin-bottom: 25px;
+            }
+            
+            .section-title::after {
+                bottom: -8px;
+                height: 2px;
+            }
+            
+            .winter-bg, .forest-bg, .city-bg {
+                padding: 20px 15px;
+                border-radius: 12px;
+            }
+            
+            .subscription-card {
+                padding: 20px 15px;
+                border-radius: 15px;
+            }
+            
+            .subscription-header {
+                margin-bottom: 20px;
+            }
+            
+            .subscription-count {
+                font-size: 20px;
+            }
+            
+            .subscription-title {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+            
+            .subscription-icon {
+                font-size: 35px;
+                margin-bottom: 15px;
+            }
+            
+            .subscription-description {
+                font-size: 14px;
+                min-height: 60px;
+                margin-bottom: 15px;
+            }
+            
+            .subscription-gift {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            
+            .gift-title {
+                font-size: 15px;
+            }
+            
+            .gift-text {
+                font-size: 14px;
+            }
+            
+            .subscription-price {
+                font-size: 30px;
+                margin: 15px 0;
+            }
+            
+            .subscription-price::before,
+            .subscription-price::after {
+                width: 70px;
+            }
+            
+            .price-unit {
+                font-size: 16px;
+            }
+            
+            .subscription-button {
+                padding: 14px;
+                font-size: 15px;
+                border-radius: 10px;
+            }
+            
+            .popular-badge {
+                padding: 6px 30px;
+                font-size: 11px;
+                right: -25px;
+                top: 12px;
+            }
+            
+            .info-card {
+                padding: 20px;
+                border-radius: 12px;
+            }
+            
+            .info-icon {
+                font-size: 35px;
+                margin-bottom: 15px;
+            }
+            
+            .info-title {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+            
+            .info-text {
+                font-size: 14px;
+            }
+            
+            .footer-contact-title {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+            
+            .footer-contact-description {
+                font-size: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .footer-contact-subtitle {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            
+            .address-text {
+                font-size: 15px;
+            }
+            
+            .work-hours-table td {
+                font-size: 15px;
+                padding: 8px 0;
+            }
+            
+            .social-icons {
+                gap: 10px;
+            }
+            
+            .social-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            
+            .footer-bottom {
+                font-size: 14px;
+                padding-top: 20px;
+                margin-top: 20px;
+            }
+            
+            .modal-header {
+                padding: 15px;
+            }
+            
+            .modal-title {
+                font-size: 18px;
+            }
+            
+            .modal-close {
+                font-size: 24px;
+                width: 35px;
+                height: 35px;
+            }
+            
+            .modal-body {
+                padding: 15px;
+            }
+            
+            .breadcrumbs {
+                font-size: 14px;
+                padding: 0 15px;
+            }
+        }
+        
+        /* Очень маленькие телефоны (менее 360px) */
+        @media (max-width: 360px) {
+            .page-title {
+                font-size: 22px;
+            }
+            
+            .subscription-title {
+                font-size: 18px;
+            }
+            
+            .subscription-price {
+                font-size: 28px;
+            }
+            
+            .subscription-button {
+                font-size: 14px;
+                padding: 12px;
+            }
+            
+            .popular-badge {
+                right: -22px;
+                padding: 5px 25px;
+                font-size: 10px;
+            }
+            
+            .mobile-nav {
+                width: 280px;
+                padding: 70px 15px 15px;
+            }
+            
+            .mobile-nav .nav-link {
+                font-size: 16px;
+                padding: 12px 0;
+            }
+            
+            .mobile-close-btn {
+                top: 15px;
+                right: 15px;
+                font-size: 24px;
+            }
+            
+            .footer-container {
+                padding: 0 15px;
+            }
+        }
+        
+        /* Ландшафтная ориентация телефонов */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .mobile-nav {
+                padding: 60px 15px 15px;
+            }
+            
+            .mobile-nav .nav-link {
+                padding: 10px 0;
+                font-size: 16px;
+            }
+            
+            .subscription-card {
+                padding: 15px;
+            }
+            
+            .subscription-title {
+                font-size: 18px;
+            }
+            
+            .subscription-description {
+                min-height: 50px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="header-container">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="images/logo1.png" alt="POL PROKAT" 
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjUwIiB2aWV3Qm94PSIwIDAgMTUwIDUwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8dGV4dCB4PSI3NSIgeT0iMjgiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJib2xkIj5QT0wgUFJPS0FUPC90ZXh0Pgo8L3N2Zz4='; this.style.filter='none'"
+                         style="height: 50px;">
+                </a>
+            </div>
+            
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Мобильное меню -->
+        <nav class="mobile-nav" id="mobileNav">
+            <button class="mobile-close-btn" id="mobileCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="summer.html" class="nav-link">Летний прокат</a>
+            <a href="winter.html" class="nav-link">Зимний прокат</a>
+            <a href="service.html" class="nav-link">Сервис</a>
+            <a href="shop.html" class="nav-link">Магазин</a>
+            <a href="#footer" class="nav-link">Контакты</a>
+            <div class="mobile-phone">+7 (905) 805-40-54</div>
+        </nav>
+    </header>
+
+    <!-- Хлебные крошки -->
+    <div class="breadcrumbs">
+        <a href="index.html">Главная</a> / <span>Абонементы</span>
+    </div>
+
+    <!-- Заголовок страницы -->
+    <div class="page-header">
+        <h1 class="page-title">АБОНЕМЕНТЫ</h1>
+        <p class="page-subtitle">Выгодные предложения для постоянных клиентов PolPROkat. Больше катаний - больше выгода!</p>
+    </div>
+
+    <!-- Секция электроснегокатов -->
+    <section class="subscription-section">
+        <h2 class="section-title">ЭЛЕКТРОСНЕГОКАТЫ</h2>
+        
+        <div class="winter-bg">
+            <div class="section-bg"></div>
+            <div class="snow-container" id="snowContainer1"></div>
+            
+            <div class="subscriptions-grid">
+                <!-- Электроснегокат 5 прокатов -->
+                <div class="subscription-card">
+                    <div class="subscription-header">
+                        <div class="subscription-count">5 ПРОКАТОВ</div>
+                        <div class="subscription-icon">
+                            <i class="fas fa-snowmobile"></i>
+                        </div>
+                        <h3 class="subscription-title">ЭЛЕКТРОСНЕГОКАТ</h3>
+                    </div>
+                    
+                    <div class="subscription-body">
+                        <div class="subscription-description">
+                            ПО 15 МИНУТ НА ЭЛЕКТРОСНЕГОКАТЕ
+                        </div>
+                        
+                        <div class="subscription-gift">
+                            <div class="gift-title">
+                                <i class="fas fa-gift"></i> БОНУС
+                            </div>
+                            <div class="gift-text">+1 ЧАС ТЮБИНГА в подарок</div>
+                        </div>
+                    </div>
+                    
+                    <div class="subscription-price">
+                        1500 <span class="price-unit">₽</span>
+                    </div>
+                    
+                    <button class="subscription-button" onclick="openPurchaseModal('Электроснегокат (5 прокатов)', 1500)">
+                        <i class="fas fa-shopping-cart"></i> КУПИТЬ АБОНЕМЕНТ
+                    </button>
+                </div>
+                
+                <!-- Электроснегокат 10 прокатов -->
+                <div class="subscription-card popular">
+                    <div class="popular-badge">ВЫГОДНО</div>
+                    
+                    <div class="subscription-header">
+                        <div class="subscription-count">10 ПРОКАТОВ</div>
+                        <div class="subscription-icon">
+                            <i class="fas fa-snowmobile"></i>
+                        </div>
+                        <h3 class="subscription-title">ЭЛЕКТРОСНЕГОКАТ</h3>
+                    </div>
+                    
+                    <div class="subscription-body">
+                        <div class="subscription-description">
+                            ПО 15 МИНУТ НА ЭЛЕКТРОСНЕГОКАТЕ
+                        </div>
+                        
+                        <div class="subscription-gift">
+                            <div class="gift-title">
+                                <i class="fas fa-gift"></i> БОНУС
+                            </div>
+                            <div class="gift-text">+2 ЧАСА ТЮБИНГА в подарок</div>
+                        </div>
+                    </div>
+                    
+                    <div class="subscription-price">
+                        2700 <span class="price-unit">₽</span>
+                    </div>
+                    
+                    <button class="subscription-button" onclick="openPurchaseModal('Электроснегокат (10 прокатов)', 2700)">
+                        <i class="fas fa-crown"></i> ЛУЧШЕЕ ПРЕДЛОЖЕНИЕ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция электроквадроциклов -->
+    <section class="subscription-section">
+        <h2 class="section-title">ЭЛЕКТРОКВАДРОЦИКЛЫ</h2>
+        
+        <div class="forest-bg">
+            <div class="section-bg"></div>
+            
+            <div class="subscriptions-grid">
+                <!-- Электроквадроцикл 5 прокатов -->
+                <div class="subscription-card">
+                    <div class="subscription-header">
+                        <div class="subscription-count">5 ПРОКАТОВ</div>
+                        <div class="subscription-icon">
+                            <i class="fas fa-atv"></i>
+                        </div>
+                        <h3 class="subscription-title">ЭЛЕКТРОКВАДРОЦИКЛ</h3>
+                    </div>
+                    
+                    <div class="subscription-body">
+                        <div class="subscription-description">
+                            ПО 15 МИНУТ НА ЭЛЕКТРОКВАДРОЦИКЛЕ
+                        </div>
+                        
+                        <div class="subscription-gift">
+                            <div class="gift-title">
+                                <i class="fas fa-gift"></i> БОНУС
+                            </div>
+                            <div class="gift-text">+1 ПРОКАТ СПОРТ ИНВЕНТАРЯ в подарок</div>
+                        </div>
+                    </div>
+                    
+                    <div class="subscription-price">
+                        2000 <span class="price-unit">₽</span>
+                    </div>
+                    
+                    <button class="subscription-button" onclick="openPurchaseModal('Электроквадроцикл (5 прокатов)', 2000)">
+                        <i class="fas fa-shopping-cart"></i> КУПИТЬ АБОНЕМЕНТ
+                    </button>
+                </div>
+                
+                <!-- Электроквадроцикл 10 прокатов -->
+                <div class="subscription-card popular">
+                    <div class="popular-badge">ВЫГОДНО</div>
+                    
+                    <div class="subscription-header">
+                        <div class="subscription-count">10 ПРОКАТОВ</div>
+                        <div class="subscription-icon">
+                            <i class="fas fa-atv"></i>
+                        </div>
+                        <h3 class="subscription-title">ЭЛЕКТРОКВАДРОЦИКЛ</h3>
+                    </div>
+                    
+                    <div class="subscription-body">
+                        <div class="subscription-description">
+                            ПО 15 МИНУТ НА ЭЛЕКТРОКВАДРОЦИКЛЕ
+                        </div>
+                        
+                        <div class="subscription-gift">
+                            <div class="gift-title">
+                                <i class="fas fa-gift"></i> БОНУС
+                            </div>
+                            <div class="gift-text">+2 ПРОКАТА СПОРТ ИНВЕНТАРЯ в подарок</div>
+                        </div>
+                    </div>
+                    
+                    <div class="subscription-price">
+                        3500 <span class="price-unit">₽</span>
+                    </div>
+                    
+                    <button class="subscription-button" onclick="openPurchaseModal('Электроквадроцикл (10 прокатов)', 3500)">
+                        <i class="fas fa-crown"></i> ЛУЧШЕЕ ПРЕДЛОЖЕНИЕ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция электромобилей -->
+    <section class="subscription-section">
+        <h2 class="section-title">ЭЛЕКТРОМОБИЛИ</h2>
+        
+        <div class="city-bg">
+            <div class="section-bg"></div>
+            
+            <div class="subscriptions-grid">
+                <!-- Электромобиль 5 прокатов -->
+                <div class="subscription-card">
+                    <div class="subscription-header">
+                        <div class="subscription-count">5 ПРОКАТОВ</div>
+                        <div class="subscription-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h3 class="subscription-title">ЭЛЕКТРОМОБИЛЬ</h3>
+                    </div>
+                    
+                    <div class="subscription-body">
+                        <div class="subscription-description">
+                            ПО 15 МИНУТ НА ЭЛЕКТРОМОБИЛЕ
+                        </div>
+                        
+                        <div class="subscription-gift">
+                            <div class="gift-title">
+                                <i class="fas fa-gift"></i> БОНУС
+                            </div>
+                            <div class="gift-text">+1 ПРОКАТ СПОРТ ИНВЕНТАРЯ в подарок</div>
+                        </div>
+                    </div>
+                    
+                    <div class="subscription-price">
+                        1500 <span class="price-unit">₽</span>
+                    </div>
+                    
+                    <button class="subscription-button" onclick="openPurchaseModal('Электромобиль (5 прокатов)', 1500)">
+                        <i class="fas fa-shopping-cart"></i> КУПИТЬ АБОНЕМЕНТ
+                    </button>
+                </div>
+                
+                <!-- Электромобиль 10 прокатов -->
+                <div class="subscription-card popular">
+                    <div class="popular-badge">ВЫГОДНО</div>
+                    
+                    <div class="subscription-header">
+                        <div class="subscription-count">10 ПРОКАТОВ</div>
+                        <div class="subscription-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h3 class="subscription-title">ЭЛЕКТРОМОБИЛЬ</h3>
+                    </div>
+                    
+                    <div class="subscription-body">
+                        <div class="subscription-description">
+                            ПО 15 МИНУТ НА ЭЛЕКТРОМОБИЛЕ
+                        </div>
+                        
+                        <div class="subscription-gift">
+                            <div class="gift-title">
+                                <i class="fas fa-gift"></i> БОНУС
+                            </div>
+                            <div class="gift-text">+2 ПРОКАТА СПОРТ ИНВЕНТАРЯ в подарок</div>
+                        </div>
+                    </div>
+                    
+                    <div class="subscription-price">
+                        2700 <span class="price-unit">₽</span>
+                    </div>
+                    
+                    <button class="subscription-button" onclick="openPurchaseModal('Электромобиль (10 прокатов)', 2700)">
+                        <i class="fas fa-crown"></i> ЛУЧШЕЕ ПРЕДЛОЖЕНИЕ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Информационная секция -->
+    <section class="info-section">
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3 class="info-title">КАК РАБОТАЮТ АБОНЕМЕНТЫ</h3>
+                <p class="info-text">Абонемент действует в течение всего сезона. Вы можете использовать прокаты в любой удобный день.</p>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="info-title">МОЖНО ДЕЛИТЬСЯ</h3>
+                <p class="info-text">Абонементом могут пользоваться все члены вашей семьи. Просто предъявите карту при посещении.</p>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <h3 class="info-title">ВЫГОДА ДО 25%</h3>
+                <p class="info-text">Покупая абонемент, вы экономите до 25% по сравнению с разовыми посещениями.</p>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <h3 class="info-title">БОНУСЫ И ПОДАРКИ</h3>
+                <p class="info-text">К каждому абонементу мы дарим дополнительные бонусы для большего удовольствия.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Модальное окно покупки -->
+    <div class="purchase-modal" id="purchaseModal">
+        <div class="purchase-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">ПОКУПКА АБОНЕМЕНТА</h2>
+                <button class="modal-close" onclick="closePurchaseModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="purchaseForm">
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Выбранный абонемент:</label>
+                        <div id="selectedSubscription" style="padding: 12px; background-color: #f9f9f9; border-radius: 8px; font-weight: bold; color: #F26B36; font-size: 18px; margin-bottom: 5px;"></div>
+                        <div id="selectedPrice" style="font-size: 24px; font-weight: bold; text-align: center; color: #F26B36; margin: 15px 0;"></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Ваше имя:</label>
+                        <input type="text" id="purchaseName" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Телефон:</label>
+                        <input type="tel" id="purchasePhone" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Email:</label>
+                        <input type="email" id="purchaseEmail" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Комментарий:</label>
+                        <textarea id="purchaseComment" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; min-height: 80px; font-size: 16px;" placeholder="Дополнительные пожелания"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px;">
+                        <button type="button" onclick="closePurchaseModal()" style="flex: 1; padding: 15px; background: #f5f5f5; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: background-color 0.3s; font-size: 16px;">
+                            Отмена
+                        </button>
+                        <button type="submit" style="flex: 1; padding: 15px; background: #F26B36; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: background-color 0.3s; font-size: 16px;">
+                            Оформить заявку
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подвал -->
+    <footer id="footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-contact">
+                    <h3 class="footer-contact-title">КОНТАКТЫ</h3>
+                    <p class="footer-contact-description">Принимаем заявки на прокат и покупку абонементов.</p>
+                    
+                    <p class="footer-contact-subtitle">Прокат POL PROKAT в городе Полевской</p>
+                    
+                    <div class="address-block">
+                        <p class="address-text">АДРЕС ПРОКАТА: УЛ. ЛЕНИНА, 19, ПОЛЕВСКОЙ</p>
+                        <p class="address-text">ТЕЛЕФОН: +7 (495) 805-40-54</p>
+                    </div>
+                    
+                    <div class="address-block">
+                        <p class="address-text">АДРЕС ПРОКАТА: УЛ. КОММУНИСТИЧЕСКАЯ, 29, ПОЛЕВСКОЙ</p>
+                        <p class="address-text">ТЕЛЕФОН: +7 (495) 805-18-18</p>
+                    </div>
+                    
+                    <div class="work-hours">
+                        <h3 class="footer-contact-subtitle">ЧАСЫ РАБОТЫ:</h3>
+                        <table class="work-hours-table">
+                            <tr>
+                                <td>ПН-ПТ:</td>
+                                <td>10:00-19:00</td>
+                            </tr>
+                            <tr>
+                                <td>СБ:</td>
+                                <td>10:00-18:00</td>
+                            </tr>
+                            <tr>
+                                <td>ВС:</td>
+                                <td>11:00-16:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- Социальные сети -->
+                    <div class="social-media">
+                        <h3 class="social-media-title">СВЯЗАТЬСЯ С НАМИ:</h3>
+                        <div class="social-icons">
+                            <a href="https://wa.me/79058054054" class="social-icon whatsapp" target="_blank" title="WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="https://vk.com/polprokat" class="social-icon vk" target="_blank" title="ВКонтакте">
+                                <i class="fab fa-vk"></i>
+                            </a>
+                            <a href="https://t.me/polprokat96" class="social-icon telegram" target="_blank" title="Telegram">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://www.instagram.com/polprokat?utm_medium=copy_link" class="social-icon instagram" target="_blank" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-map">
+                    <div class="footer-map-placeholder">
+                        <img src="images/map.jpg" alt="Карта местоположения сервиса POL PROKAT">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© POL PROKAT. Все права защищены.</p>
+                <p>Абонементы действительны в течение одного сезона. Подробности уточняйте у администратора.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Мобильное меню
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+    const mobileNav = document.getElementById('mobileNav');
+
+    // Открытие меню
+    mobileMenuToggle.addEventListener('click', function() {
+        mobileNav.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Закрытие меню
+    mobileCloseBtn.addEventListener('click', function() {
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+
+    // Закрытие меню при клике на ссылку
+    document.querySelectorAll('.mobile-nav .nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            mobileNav.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // Снежинки анимация
+    function createSnowflakes(containerId, count = 30) {
+        const snowContainer = document.getElementById(containerId);
+        if (!snowContainer) return;
+        
+        snowContainer.innerHTML = '';
+        
+        for (let i = 0; i < count; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            
+            const size = Math.random() * 4 + 1;
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+            snowflake.style.left = `${Math.random() * 100}%`;
+            snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+            
+            // Для мобильных меньше снежинок и медленнее анимация
+            const duration = window.innerWidth <= 768 ? Math.random() * 15 + 8 : Math.random() * 10 + 5;
+            const delay = Math.random() * 5;
+            
+            // Создаем анимацию падения
+            const animationName = `fall-${containerId}`;
+            
+            // Динамически добавляем CSS анимацию
+            if (!document.getElementById(`animation-${containerId}`)) {
+                const style = document.createElement('style');
+                style.id = `animation-${containerId}`;
+                style.textContent = `
+                    @keyframes ${animationName} {
+                        0% {
+                            top: -20px;
+                            opacity: 0;
+                        }
+                        10% {
+                            opacity: 0.8;
+                        }
+                        90% {
+                            opacity: 0.8;
+                        }
+                        100% {
+                            top: 100%;
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            snowflake.style.animation = `${animationName} ${duration}s linear ${delay}s infinite`;
+            
+            snowContainer.appendChild(snowflake);
+        }
+    }
+
+    // Модальное окно покупки
+    let currentSubscription = '';
+    let currentPrice = 0;
+    
+    function openPurchaseModal(subscriptionName, price) {
+        currentSubscription = subscriptionName;
+        currentPrice = price;
+        
+        document.getElementById('selectedSubscription').textContent = subscriptionName;
+        document.getElementById('selectedPrice').textContent = `${price.toLocaleString('ru-RU')} ₽`;
+        
+        document.getElementById('purchaseModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closePurchaseModal() {
+        document.getElementById('purchaseModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Обработка формы покупки
+    document.getElementById('purchaseForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('purchaseName').value;
+        const phone = document.getElementById('purchasePhone').value;
+        const email = document.getElementById('purchaseEmail').value;
+        const comment = document.getElementById('purchaseComment').value;
+        
+        alert(`Спасибо, ${name}!\n\nВаша заявка на абонемент "${currentSubscription}" отправлена.\n\nСтоимость: ${currentPrice.toLocaleString('ru-RU')} ₽\nТелефон: ${phone}\nEmail: ${email}\n\nМы свяжемся с вами в ближайшее время для подтверждения заказа.`);
+        
+        document.getElementById('purchaseForm').reset();
+        closePurchaseModal();
+    });
+
+    // Инициализация при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+        // Создаем снежинки
+        createSnowflakes('snowContainer1');
+        
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Добавляем активный класс текущей странице в меню
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.mobile-nav .nav-link').forEach(link => {
+            const linkHref = link.getAttribute('href');
+            if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
+                link.style.fontWeight = 'bold';
+                link.style.color = '#fff';
+                link.style.backgroundColor = 'rgba(255,255,255,0.2)';
+                link.style.borderRadius = '5px';
+                link.style.paddingLeft = '15px';
+            }
+        });
+        
+        // Закрытие модального окна при клике на оверлей
+        document.getElementById('purchaseModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePurchaseModal();
+            }
+        });
+        
+        // Закрытие модального окна при нажатии ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePurchaseModal();
+            }
+        });
+        
+        // Адаптация количества снежинок для мобильных устройств
+        function adjustSnowflakes() {
+            const snowCount = window.innerWidth <= 768 ? 20 : 30;
+            createSnowflakes('snowContainer1', snowCount);
+        }
+        
+        // Пересоздаем снежинки при изменении размера окна
+        window.addEventListener('resize', adjustSnowflakes);
+        
+        // Анимация карточек при скролле
+        const cards = document.querySelectorAll('.subscription-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+        
+        // Добавляем анимацию для заголовков секций
+        const sectionTitles = document.querySelectorAll('.section-title');
+        const titleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        sectionTitles.forEach(title => {
+            title.style.opacity = '0';
+            title.style.transform = 'translateY(20px)';
+            title.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            titleObserver.observe(title);
+        });
+        
+        // Оптимизация для мобильных устройств
+        if (window.innerWidth <= 768) {
+            // Уменьшаем hover-эффекты для тач-устройств
+            const subscriptionButtons = document.querySelectorAll('.subscription-button');
+            subscriptionButtons.forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                button.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
+    });
+    </script>
+</body>
+</html>

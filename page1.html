@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Зимний прокат - POL PROKAT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #fff;
+            color: #000;
+            line-height: 1.4;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        
+        /* Шапка сайта */
+        header {
+            background-color: #F26B36;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-logo img {
+            height: 50px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+        
+        /* Мобильное меню */
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            max-width: 80%;
+            height: 100vh;
+            background-color: #F26B36;
+            z-index: 1000;
+            padding: 80px 20px 20px;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            transform: translateX(100%);
+        }
+
+        .mobile-nav.active {
+            display: block;
+            transform: translateX(0);
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .mobile-nav .nav-link {
+            display: block;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .mobile-nav .nav-link:hover {
+            padding-left: 10px;
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .mobile-phone {
+            display: none;
+            font-weight: bold;
+            color: #fff;
+            font-size: 18px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+        
+        .mobile-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        
+        /* Хлебные крошки */
+        .breadcrumbs {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .breadcrumbs a {
+            color: #F26B36;
+            text-decoration: none;
+        }
+        
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumbs span {
+            color: #666;
+        }
+        
+        /* Заголовок страницы */
+        .page-header {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+        
+        .page-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #F26B36;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Новый дизайн карточек инвентаря */
+        .inventory-section {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+        
+        .inventory-filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background-color: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active,
+        .filter-btn:hover {
+            background-color: #F26B36;
+            color: white;
+            border-color: #F26B36;
+        }
+        
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        /* НОВЫЙ ДИЗАЙН КАРТОЧЕК */
+        .inventory-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 480px;
+        }
+        
+        .inventory-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-image-container {
+            height: 220px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .card-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s;
+        }
+        
+        .inventory-card:hover .card-image-container img {
+            transform: scale(1.05);
+        }
+        
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #F26B36;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 10px;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #F26B36;
+            text-align: center;
+            margin-bottom: 15px;
+            min-height: 35px;
+        }
+        
+        .card-price span {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .card-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.5;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .card-button {
+            background-color: #F26B36;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            text-align: center;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-button:hover {
+            background-color: #e05a2b;
+        }
+        
+        .card-button.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .card-button.secondary:hover {
+            background-color: #e5e5e5;
+        }
+        
+        /* Модальное окно с ценами */
+        .price-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .price-modal.active {
+            display: flex;
+        }
+        
+        .price-modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 2px solid #F26B36;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #F26B36;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        
+        .modal-close:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .modal-description {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .price-table th {
+            background-color: #F26B36;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .price-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        
+        .price-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .price-table .highlight {
+            background-color: #fff9e6;
+            font-weight: bold;
+        }
+        
+        /* Секция преимуществ */
+        .benefits-section {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .benefit-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #F26B36;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .benefit-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .benefit-text {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Подвал (такой же как на главной) */
+        footer {
+            background-color: #F26B36;
+            color: #fff;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-main {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 50px;
+            align-items: flex-start;
+        }
+        
+        .footer-contact {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .footer-map {
+            flex: 1.2;
+            min-height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .footer-map-placeholder {
+            height: 100%;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            min-height: 400px;
+        }
+        
+        .footer-map-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .footer-contact-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+        
+        .footer-contact-description {
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .footer-contact-subtitle {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 18px;
+            color: #fff;
+        }
+        
+        .address-block {
+            margin-bottom: 25px;
+        }
+        
+        .address-text {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .work-hours {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .work-hours-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .work-hours-table td {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        .work-hours-table td:first-child {
+            font-weight: bold;
+            width: 40%;
+        }
+        
+        .social-media {
+            margin-top: 35px;
+        }
+        
+        .social-media-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .social-icon.whatsapp:hover {
+            background-color: #25D366;
+        }
+        
+        .social-icon.vk:hover {
+            background-color: #0077FF;
+        }
+        
+        .social-icon.telegram:hover {
+            background-color: #0088cc;
+        }
+        
+        .social-icon.instagram:hover {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        /* ===== МОБИЛЬНАЯ АДАПТИВНОСТЬ ===== */
+        @media (max-width: 992px) {
+            .page-title {
+                font-size: 30px;
+            }
+            
+            .inventory-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .inventory-card {
+                height: 470px;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .price-modal-content {
+                max-width: 95%;
+            }
+            
+            .footer-main {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .footer-map-placeholder {
+                min-height: 300px;
+            }
+            
+            /* Мобильное меню */
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .mobile-phone {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .inventory-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            
+            .inventory-card {
+                height: 460px;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .inventory-filters {
+                justify-content: center;
+            }
+            
+            .modal-header {
+                padding: 20px;
+            }
+            
+            .modal-title {
+                font-size: 24px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .price-table {
+                font-size: 14px;
+            }
+            
+            .price-table th,
+            .price-table td {
+                padding: 10px 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 26px;
+            }
+            
+            .page-subtitle {
+                font-size: 16px;
+            }
+            
+            .filter-btn {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            
+            .inventory-card {
+                height: 450px;
+            }
+            
+            .card-title {
+                font-size: 20px;
+                min-height: 50px;
+            }
+            
+            .card-price {
+                font-size: 24px;
+            }
+            
+            .modal-title {
+                font-size: 20px;
+            }
+            
+            .inventory-filters {
+                gap: 10px;
+            }
+            
+            .filter-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="header-container">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="images/logo1.png" alt="POL PROKAT" 
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjUwIiB2aWV3Qm94PSIwIDAgMTUwIDUwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8dGV4dCB4PSI3NSIgeT0iMjgiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJib2xkIj5QT0wgUFJPS0FUPC90ZXh0Pgo8L3N2Zz4='; this.style.filter='none'"
+                         style="height: 50px;">
+                </a>
+            </div>
+            
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Мобильное меню -->
+        <nav class="mobile-nav" id="mobileNav">
+            <button class="mobile-close-btn" id="mobileCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="#inventory" class="nav-link">Инвентарь</a>
+            <a href="#benefits" class="nav-link">Преимущества</a>
+            <a href="#footer" class="nav-link">Контакты</a>
+            <div class="mobile-phone">+7 (905) 805-40-54</div>
+        </nav>
+    </header>
+
+    <!-- Хлебные крошки -->
+    <div class="breadcrumbs">
+        <a href="index.html">Главная</a> / <span>Зимний прокат</span>
+    </div>
+
+    <!-- Заголовок страницы -->
+    <div class="page-header">
+        <h1 class="page-title">ЗИМНИЙ ПРОКАТ</h1>
+        <p class="page-subtitle">Электроснегокаты и тюбинги для активного зимнего отдыха в Полевском</p>
+    </div>
+
+    <!-- Секция инвентаря -->
+    <section class="inventory-section" id="inventory">
+        <div class="inventory-filters">
+            <button class="filter-btn active" data-filter="all">Весь инвентарь</button>
+        </div>
+        
+        <div class="inventory-grid">
+            <!-- Электроснегокаты -->
+            <div class="inventory-card" data-category="snowmobile">
+                <div class="card-image-container">
+                    <img src="images/elsneg.png" alt="Электроснегокаты" 
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyMCIgdmlld0JveD0iMCAwIDQwMCAyMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjIwIiBmaWxsPSIjRkY4QzYwIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTEwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+RUxFQ1RST1NORUdPS0FUPC90ZXh0Pgo8L3N2Zz4=';">
+                    <div class="card-badge">Популярное</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">ЭЛЕКТРОСНЕГОКАТЫ</h3>
+                    <div class="card-price">от 300 ₽ <span>/ 15 мин</span></div>
+                    <div class="card-description">
+                        Зимние приключения здесь! Катайся по заснеженным дорожкам и заряжайся позитивом
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-button" onclick="openBooking('Электроснегокаты')">ЗАБРОНИРОВАТЬ</button>
+                        <button class="card-button secondary" onclick="openPriceModal('snowmobile')">ПРАЙС-ЛИСТ</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Тюбинги -->
+            <div class="inventory-card" data-category="tubing">
+                <div class="card-image-container">
+                    <img src="images/tybing.png" alt="Тюбинги" 
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyMCIgdmlld0JveD0iMCAwIDQwMCAyMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjIwIiBmaWxsPSIjRkY4QzYwIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTEwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+VFVCSU5HPC90ZXh0Pgo8L3N2Zz4=';">
+                    <div class="card-badge">Для семьи</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">ТЮБИНГИ</h3>
+                    <div class="card-price">от 100 ₽ <span>/ час</span></div>
+                    <div class="card-description">
+                        Зимний драйв для всей семьи! Весело, безопасно и доступно для всех возрастов
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-button" onclick="openBooking('Тюбинги')">ЗАБРОНИРОВАТЬ</button>
+                        <button class="card-button secondary" onclick="openPriceModal('tubing')">ПРАЙС-ЛИСТ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция преимуществ -->
+    <section class="benefits-section" id="benefits">
+        <h2 class="page-title" style="font-size: 32px; margin-bottom: 40px;">ПОЧЕМУ ВЫБИРАЮТ НАС ЗИМОЙ</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-snowflake"></i>
+                </div>
+                <h3 class="benefit-title">Зимний инвентарь</h3>
+                <p class="benefit-text">Современная техника, подготовленная для зимних условий</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-thermometer-half"></i>
+                </div>
+                <h3 class="benefit-title">Теплая экипировка</h3>
+                <p class="benefit-text">Предоставляем теплую одежду и аксессуары при необходимости</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-snowman"></i>
+                </div>
+                <h3 class="benefit-title">Семейный отдых</h3>
+                <p class="benefit-text">Инвентарь для всех возрастов - от детей до взрослых</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-mountain"></i>
+                </div>
+                <h3 class="benefit-title">Организованные трассы</h3>
+                <p class="benefit-text">Безопасные подготовленные трассы для катания</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Модальные окна с ценами -->
+    
+    <!-- Модалка для электроснегокатов -->
+    <div class="price-modal" id="priceModalSnowmobile">
+        <div class="price-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">ЭЛЕКТРОСНЕГОКАТЫ</h2>
+                <button class="modal-close" onclick="closePriceModal('snowmobile')">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">
+                    ЭЛЕКТРОСНЕГОКАТЫ - Зимние приключения здесь!<br>
+                    Зима — не повод сидеть дома! Катайся по заснеженным дорожкам, наслаждайся свежим воздухом и заряжайся позитивом. Электроснегокаты — это новый уровень зимних развлечений, которые подарят тебе незабываемые впечатления!
+                </p>
+                <p class="modal-description" style="font-weight: bold; color: #F26B36;">
+                    PolPROkat — ваш проводник в мир активного отдыха и спорта!
+                </p>
+                
+                <table class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Будни</th>
+                            <th>Выходные</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>15 минут</td>
+                            <td>300 ₽</td>
+                            <td>400 ₽</td>
+                        </tr>
+                        <tr>
+                            <td>30 минут</td>
+                            <td>500 ₽</td>
+                            <td>600 ₽</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка для тюбингов -->
+    <div class="price-modal" id="priceModalTubing">
+        <div class="price-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">ТЮБИНГИ</h2>
+                <button class="modal-close" onclick="closePriceModal('tubing')">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">
+                    Тюбинги — зимний драйв для всей семьи!<br>
+                    Подари себе и своим близким незабываемые моменты на снежных склонах с нашими тюбингами. Это весело, безопасно и доступно для всех возрастов. Собирайтесь вместе и наслаждайтесь зимними развлечениями! 
+                </p>
+                <p class="modal-description" style="font-weight: bold; color: #F26B36;">
+                    PolPROkat — ваш проводник в мир активного отдыха и спорта!
+                </p>
+                
+                <table class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Будни</th>
+                            <th>Выходные</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1 час</td>
+                            <td>100 ₽</td>
+                            <td>150 ₽</td>
+                        </tr>
+                        <tr>
+                            <td>12 часов</td>
+                            <td>300 ₽</td>
+                            <td>350 ₽</td>
+                        </tr>
+                        <tr>
+                            <td>24 часа</td>
+                            <td>400 ₽</td>
+                            <td>450 ₽</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подвал -->
+    <footer id="footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-contact">
+                    <h3 class="footer-contact-title">КОНТАКТНЫЕ ДАННЫЕ</h3>
+                    <p class="footer-contact-description">Мы всегда на связи, чтобы ответить на ваши вопросы и помочь с бронированием зимнего инвентаря.</p>
+                    
+                    <p class="footer-contact-subtitle">Прокат электроснегокатов и тюбингов в городе Полевской</p>
+                    
+                    <div class="address-block">
+                        <p class="address-text">АДРЕС УЛ. ЛЕНИНА, 19, ПОЛЕВСКОЙ</p>
+                        <p class="address-text">ТЕЛЕФОН: +7 (495) 805-40-54</p>
+                    </div>
+                    
+                    <div class="address-block">
+                        <p class="address-text">АДРЕС УЛ. КОММУНИСТИЧЕСКАЯ, 29, ПОЛЕВСКОЙ</p>
+                        <p class="address-text">ТЕЛЕФОН: +7 (495) 805-18-18</p>
+                    </div>
+                    
+                    <div class="address-block">
+                        <p class="address-text">АДРЕС ГОРНОЛЫЖНЫЙ КОМПЛЕКС "СНЕЖКА", ПОЛЕВСКОЙ</p>
+                        <p class="address-text">ТЕЛЕФОН: +7 (950) 550-40-54</p>
+                    </div>
+                    
+                    <div class="work-hours">
+                        <h3 class="footer-contact-subtitle">ЧАСЫ РАБОТЫ ЗИМНЕГО ПРОКАТА:</h3>
+                        <table class="work-hours-table">
+                            <tr>
+                                <td>ПН-ЧТ:</td>
+                                <td>11:00-20:00</td>
+                            </tr>
+                            <tr>
+                                <td>ПТ:</td>
+                                <td>11:00-21:00</td>
+                            </tr>
+                            <tr>
+                                <td>СБ-ВС:</td>
+                                <td>10:00-21:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- Социальные сети -->
+                    <div class="social-media">
+                        <h3 class="social-media-title">МЫ В СОЦСЕТЯХ:</h3>
+                        <div class="social-icons">
+                            <a href="https://wa.me/79058054054" class="social-icon whatsapp" target="_blank" title="WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="https://vk.com/polprokat" class="social-icon vk" target="_blank" title="ВКонтакте">
+                                <i class="fab fa-vk"></i>
+                            </a>
+                            <a href="https://t.me/polprokat96" class="social-icon telegram" target="_blank" title="Telegram">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://www.instagram.com/polprokat?utm_medium=copy_link" class="social-icon instagram" target="_blank" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-map">
+                    <div class="footer-map-placeholder">
+                        <img src="images/map.jpg" alt="Карта местоположения POL PROKAT">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© POL PROKAT. Все права защищены.</p>
+                <p>Первый в Полевском прокат для яркого и активного зимнего отдыха</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно бронирования -->
+    <div class="price-modal" id="bookingModal">
+        <div class="price-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="bookingTitle">БРОНИРОВАНИЕ</h2>
+                <button class="modal-close" onclick="closeBooking()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm">
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Выбранный инвентарь:</label>
+                        <input type="text" id="bookingItem" readonly style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9; font-weight: bold; color: #F26B36;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Ваше имя:</label>
+                        <input type="text" id="bookingName" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Телефон:</label>
+                        <input type="tel" id="bookingPhone" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Дата и время:</label>
+                        <input type="datetime-local" id="bookingDateTime" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #333;">Дополнительная информация:</label>
+                        <textarea id="bookingMessage" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; min-height: 100px;" placeholder="Укажите желаемую модель, длительность проката и другую важную информацию"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px;">
+                        <button type="button" onclick="closeBooking()" style="flex: 1; padding: 15px; background: #f5f5f5; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background-color 0.3s;">
+                            Отмена
+                        </button>
+                        <button type="submit" style="flex: 1; padding: 15px; background: #F26B36; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background-color 0.3s;">
+                            Отправить заявку
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Мобильное меню
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+    const mobileNav = document.getElementById('mobileNav');
+
+    // Открытие меню
+    mobileMenuToggle.addEventListener('click', function() {
+        mobileNav.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Закрытие меню
+    mobileCloseBtn.addEventListener('click', function() {
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+
+    // Закрытие меню при клике на ссылку
+    document.querySelectorAll('.mobile-nav .nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            mobileNav.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // Фильтрация инвентаря
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Убираем активный класс у всех кнопок
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            // Добавляем активный класс текущей кнопке
+            this.classList.add('active');
+            
+            const filter = this.getAttribute('data-filter');
+            const cards = document.querySelectorAll('.inventory-card');
+            
+            cards.forEach(card => {
+                if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Функции для работы с модальными окнами цен
+    function openPriceModal(type) {
+        closeAllModals();
+        document.getElementById(`priceModal${capitalizeFirstLetter(type)}`).classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closePriceModal(type) {
+        document.getElementById(`priceModal${capitalizeFirstLetter(type)}`).classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+    
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    function closeAllModals() {
+        document.querySelectorAll('.price-modal').forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
+
+    // Закрытие модальных окон при клике на оверлей
+    document.querySelectorAll('.price-modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    });
+
+    // Функция открытия модального окна бронирования
+    function openBooking(itemName) {
+        closeAllModals();
+        document.getElementById('bookingItem').value = itemName;
+        document.getElementById('bookingTitle').textContent = 'БРОНИРОВАНИЕ: ' + itemName;
+        document.getElementById('bookingModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Функция закрытия модального окна бронирования
+    function closeBooking() {
+        document.getElementById('bookingModal').classList.remove('active');
+        document.getElementById('bookingForm').reset();
+        document.body.style.overflow = 'auto';
+    }
+
+    // Обработка формы бронирования
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const item = document.getElementById('bookingItem').value;
+        const name = document.getElementById('bookingName').value;
+        const phone = document.getElementById('bookingPhone').value;
+        const dateTime = document.getElementById('bookingDateTime').value;
+        const message = document.getElementById('bookingMessage').value;
+        
+        alert(`Спасибо, ${name}!\n\nВаша заявка на бронирование ${item} отправлена.\nДата и время: ${dateTime}\nТелефон: ${phone}\n\nМы свяжемся с вами в ближайшее время для подтверждения.`);
+        
+        closeBooking();
+    });
+
+    // Выравнивание высоты карточек
+    function equalizeCardHeights() {
+        if (window.innerWidth > 768) {
+            const cards = document.querySelectorAll('.inventory-card');
+            let maxHeight = 0;
+            
+            // Сначала сбрасываем высоту
+            cards.forEach(card => {
+                card.style.height = 'auto';
+            });
+            
+            // Находим максимальную высоту
+            cards.forEach(card => {
+                const height = card.offsetHeight;
+                if (height > maxHeight) maxHeight = height;
+            });
+            
+            // Устанавливаем одинаковую высоту
+            cards.forEach(card => {
+                card.style.height = maxHeight + 'px';
+            });
+        } else {
+            // На мобильных устройствах сбрасываем высоту
+            const cards = document.querySelectorAll('.inventory-card');
+            cards.forEach(card => {
+                card.style.height = 'auto';
+            });
+        }
+    }
+
+    // Запускаем после загрузки и при изменении размера
+    window.addEventListener('load', equalizeCardHeights);
+    window.addEventListener('resize', function() {
+        clearTimeout(window.resizeTimer);
+        window.resizeTimer = setTimeout(equalizeCardHeights, 250);
+    });
+
+    // Плавная прокрутка
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Закрытие модальных окон при нажатии ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAllModals();
+            closeBooking();
+            document.body.style.overflow = 'auto';
+        }
+    });
+    </script>
+</body>
+</html>
